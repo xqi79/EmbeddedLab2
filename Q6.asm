@@ -23,25 +23,22 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ;-------------------------------------------------------------------------------
 ; Main loop here
 ;-------------------------------------------------------------------------------
+MainLoop:
+            mov.w #2D97h, R4
+            mov.w #6239h, R5
+            mov.w #2BD4h, R6
 
- 			mov.w #2D97h,R4
- 			mov.w #6239h,R5
- 			mov.w #1024h,R6
+            call #OperationFunction;
 
-			cmp R4,R6
-			jge Subrout
- 			jmp $
+            jmp MainLoop;
 
-Subrout:
-			call #Function
-			jmp $
+OperationFunction:
 
-Function:
-			and R5,R4
- 			bis R4,R6
- 			mov.w R6,&203Ch
-
- 			ret;
+            mov.w #203Ch,R7
+            and R4,R5
+            bis R5,R6
+            mov.w R6, 0(R7)
+            ret;
 
 ;-------------------------------------------------------------------------------
 ; Stack Pointer definition
